@@ -53,8 +53,10 @@ async function join() {
 
   socket.emit("join-room", room);
 
+  const selectedCamera = document.getElementById("cameraSelect").value;
+
   localStream = await navigator.mediaDevices.getUserMedia({
-    video: true,
+    video: selectedCamera ? { deviceId: { exact: selectedCamera } } : true,
     audio: true
   });
 
@@ -114,6 +116,11 @@ socket.on("candidate", async candidate => {
     await pc.addIceCandidate(candidate);
   }
 });
+  navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+  .then(stream => {
+    stream.getTracks().forEach(track => track.stop());
+    loadCameras();
+  });
 </script>
 
 </body>
