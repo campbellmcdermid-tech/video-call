@@ -28,6 +28,21 @@ let localStream;
 let pc;
 let room;
 
+  async function loadCameras() {
+  const devices = await navigator.mediaDevices.enumerateDevices();
+  const cameras = devices.filter(device => device.kind === "videoinput");
+  const cameraSelect = document.getElementById("cameraSelect");
+
+  cameraSelect.innerHTML = "";
+
+  cameras.forEach((camera, index) => {
+    const option = document.createElement("option");
+    option.value = camera.deviceId;
+    option.text = camera.label || `Camera ${index + 1}`;
+    cameraSelect.appendChild(option);
+  });
+}
+  
 const config = {
   iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
 };
